@@ -8,21 +8,28 @@ using Fahrenheit.Core;
 
 namespace Fahrenheit.Tools.H2CS;
 
-public record FhSyntaxNode(string Name);
+public record FhSyntaxNode     (string Name);
 public record FhHeaderGuardNode(string Name);
-public record FhDefineNode(string Name, string Value) : FhSyntaxNode(Name);
+public record FhDefineNode     (string Name, string Value) : FhSyntaxNode(Name);
 
 public record FhHeaderFile(FhHeaderGuardNode HeaderGuardNode, List<FhDefineNode> Defines);
 
 public static class FhHSyntaxExtensions {
     public static bool ConstructDefineNode(this string line, [NotNullWhen(true)] out FhDefineNode? define) {
-        FhTokenizer        tokenizer = new FhTokenizer(line.AsSpan(), new char[] { '\t', ' ' });
-        ReadOnlySpan<char> deftoken  = tokenizer.GetNextToken();
+        define = default;
 
-        if (!deftoken.SequenceEqual("#define")) throw new Exception("FH_E_H2CS_DEFINE_PARSE_FAULT");
+        Span<Range> segments      = stackalloc Range[3];
+        int         segment_count = line.AsSpan().SplitAny(segments, [ '\t', ' ' ], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        string name  = tokenizer.GetNextToken().Trim().ToString();
-        string value = tokenizer.GetNextToken().Trim().ToString();
+        if (segment_count != 3) {
+            FhLog.Error($"unexpected header segment count {segment_count} (!= 3)");
+            return false;
+        }
+
+        if (!line[segments[0]].Equals("#define")) throw new Exception("FH_E_H2CS_DEFINE_PARSE_FAULT");
+
+        string name  = line[segments[1]].Trim();
+        string value = line[segments[2]].Trim();
 
         if (char.IsDigit(name[0]))
             name = $"_{name}";
