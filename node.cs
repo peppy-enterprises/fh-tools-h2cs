@@ -4,8 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
-using Fahrenheit.Core;
-
 namespace Fahrenheit.Tools.H2CS;
 
 public record FhSyntaxNode     (string Name);
@@ -22,7 +20,7 @@ public static class FhHSyntaxExtensions {
         int         segment_count = line.AsSpan().SplitAny(segments, [ '\t', ' ' ], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         if (segment_count != 3) {
-            FhLog.Error($"unexpected header segment count {segment_count} (!= 3)");
+            Console.WriteLine($"unexpected header segment count {segment_count} (!= 3)");
             return false;
         }
 

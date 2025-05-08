@@ -31,35 +31,35 @@ internal sealed record FhH2CSArgs(string DefaultNamespace,
                                   string DestPath);
 
 internal class H2CSArgsBinder : BinderBase<FhH2CSArgs> {
-    private readonly Option<string> _optDefNs;
-    private readonly Option<bool>   _optEmitProlog;
-    private readonly Option<bool>   _optEmitDedup;
-    private readonly Option<string> _optTypeName;
-    private readonly Option<string> _optSrcPath;
-    private readonly Option<string> _optDestPath;
+    private readonly Option<string> _opt_def_ns;
+    private readonly Option<bool>   _opt_emit_prolog;
+    private readonly Option<bool>   _opt_emit_dedup;
+    private readonly Option<string> _opt_type_name;
+    private readonly Option<string> _opt_src_path;
+    private readonly Option<string> _opt_dest_path;
 
-    public H2CSArgsBinder(Option<string> optDefNs, 
+    public H2CSArgsBinder(Option<string> optDefNs,
                           Option<bool>   optEmitProlog,
                           Option<bool>   optEmitDedup,
                           Option<string> optTypeName,
                           Option<string> optFilePath,
                           Option<string> optDestPath) {
-        _optDefNs      = optDefNs;
-        _optEmitProlog = optEmitProlog;
-        _optEmitDedup  = optEmitDedup;
-        _optTypeName   = optTypeName;
-        _optSrcPath    = optFilePath;
-        _optDestPath   = optDestPath;
+        _opt_def_ns      = optDefNs;
+        _opt_emit_prolog = optEmitProlog;
+        _opt_emit_dedup  = optEmitDedup;
+        _opt_type_name   = optTypeName;
+        _opt_src_path    = optFilePath;
+        _opt_dest_path   = optDestPath;
     }
 
-    protected override FhH2CSArgs GetBoundValue(BindingContext bindingContext) {
-        string defNs      = bindingContext.ParseResult.GetValueForOption(_optDefNs) ?? throw new Exception("E_CLI_ARG_NULL");
-        bool   emitProlog = bindingContext.ParseResult.GetValueForOption(_optEmitProlog);
-        bool   emitDedup  = bindingContext.ParseResult.GetValueForOption(_optEmitDedup);
-        string typeName   = bindingContext.ParseResult.GetValueForOption(_optTypeName) ?? throw new Exception("E_CLI_ARG_NULL");
-        string srcPath    = bindingContext.ParseResult.GetValueForOption(_optSrcPath) ?? throw new Exception("E_CLI_ARG_NULL");
-        string destPath   = bindingContext.ParseResult.GetValueForOption(_optDestPath) ?? throw new Exception("E_CLI_ARG_NULL");
+    protected override FhH2CSArgs GetBoundValue(BindingContext binding_context) {
+        string def_ns      = binding_context.ParseResult.GetValueForOption(_opt_def_ns) ?? throw new Exception("E_CLI_ARG_NULL");
+        bool   emit_prolog = binding_context.ParseResult.GetValueForOption(_opt_emit_prolog);
+        bool   emit_dedup  = binding_context.ParseResult.GetValueForOption(_opt_emit_dedup);
+        string type_name   = binding_context.ParseResult.GetValueForOption(_opt_type_name) ?? throw new Exception("E_CLI_ARG_NULL");
+        string src_path    = binding_context.ParseResult.GetValueForOption(_opt_src_path) ?? throw new Exception("E_CLI_ARG_NULL");
+        string dest_path   = binding_context.ParseResult.GetValueForOption(_opt_dest_path) ?? throw new Exception("E_CLI_ARG_NULL");
 
-        return new FhH2CSArgs(defNs, emitProlog, emitDedup, typeName, srcPath, destPath);
+        return new FhH2CSArgs(def_ns, emit_prolog, emit_dedup, type_name, src_path, dest_path);
     }
 }
